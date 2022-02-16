@@ -1,0 +1,18 @@
+<mvc:View controllerName="CharacteristicCustomControl.controller.View1" xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:cc="CharacteristicCustomControl.customControl">
+	<App id="idAppControl">
+		<pages>
+			<Page title="Your Quick Start application is ready!">
+				<content>
+					<Title text="Characteristics Input" />
+					<cc:CharacteristicInput 
+						type="CHAR"
+						multiValue="false"
+						valueHelpOnly="false"
+						length="30"
+						/>
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>
