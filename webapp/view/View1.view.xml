@@ -1,16 +1,76 @@
 <mvc:View controllerName="CharacteristicCustomControl.controller.View1" xmlns:html="http://www.w3.org/1999/xhtml"
-	xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:cc="CharacteristicCustomControl.customControl">
+	xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:cc="CharacteristicCustomControl.customControl"
+	xmlns:core="sap.ui.core">
 	<App id="idAppControl">
 		<pages>
 			<Page title="Your Quick Start application is ready!">
 				<content>
 					<Title text="Characteristics Input" />
-					<cc:CharacteristicInput 
-						type="CHAR"
-						multiValue="false"
-						valueHelpOnly="false"
-						length="30"
-						/>
+					<VBox>
+						<Text text="Simple Input field" />
+						<cc:CharacteristicInput 
+							type="CHAR"
+							multiValue="false"
+							valueHelpOnly="false"
+							length="30"
+							/>
+						
+						<Text text="Single Input field with Value help" />
+						<cc:CharacteristicInput 
+							type="CHAR"
+							multiValue="false"
+							valueHelpOnly="false"
+							length="15"
+							showValueHelp="true">
+							<cc:valueHelpItems>
+								<core:Item key="TEST" text="Test1" />
+								<core:Item key="TEST2" text="Test2" />
+								<core:Item key="TEST3" text="Test3" />
+							</cc:valueHelpItems>
+						</cc:CharacteristicInput>
+						
+						<Text text="Single Input field with Value help only" />
+						<cc:CharacteristicInput 
+							type="CHAR"
+							multiValue="false"
+							valueHelpOnly="true"
+							showValueHelp="true"
+							length="30"
+							/>
+							
+						<Text text="Multiple Input field with value help" />
+						<cc:CharacteristicInput 
+							type="CHAR"
+							multiValue="true"
+							valueHelpOnly="true"
+							showValueHelp="true"
+							length="30">
+							<cc:valueHelpItems>
+								<core:Item key="TEST" text="Test1" />
+								<core:Item key="TEST2" text="Test2" />
+								<core:Item key="TEST3" text="Test3" />
+							</cc:valueHelpItems>
+						</cc:CharacteristicInput>
+						
+						<Text text="Multiple Input field with value help and Multi Input" />
+						<cc:CharacteristicInput 
+							type="CHAR"
+							multiValue="true"
+							valueHelpOnly="false"
+							showValueHelp="true"
+							stackMultiValues="false"
+							length="30">
+							<cc:valueHelpItems>
+								<core:Item key="TEST" text="Test1" />
+								<core:Item key="TEST2" text="Test2" />
+								<core:Item key="TEST3" text="Test3" />
+							</cc:valueHelpItems>
+							<cc:values>
+								<core:Item key="TEST" text="Test1" />
+							</cc:values>
+						</cc:CharacteristicInput>
+					</VBox>
+					
 				</content>
 			</Page>
 		</pages>
