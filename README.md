@@ -40,3 +40,5 @@ This UI5 controls can manage all the different properties for Characteristics. B
 
 ## Characteristic Examples 
 Below examples are part of this project. If you clone the repository, you can test the control and check if this fits your purpose.
+
+![Characteristic Options](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
