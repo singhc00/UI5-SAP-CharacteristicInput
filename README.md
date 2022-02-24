@@ -41,4 +41,9 @@ This UI5 controls can manage all the different properties for Characteristics. B
 ## Characteristic Examples 
 Below examples are part of this project. If you clone the repository, you can test the control and check if this fits your purpose.
 
-![Characteristic Options](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+When you select Show Characteristic Options from the Segmented Button at the top. It will show all the available options for the Characteristic control.
+![Characteristic Options](/exampleImages/AllAvailableOptions.PNG?raw=true)
+
+When you select Show Characteristics - Table from the Segmented Button at the top. It will show different types of Characteristic in the list and you can play around with them.
+![Characteristic Table](/exampleImages/DifferentCharacteristicTypesTable.PNG?raw=true)
+
