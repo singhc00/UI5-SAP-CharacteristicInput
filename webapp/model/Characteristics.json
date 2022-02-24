@@ -1,0 +1,743 @@
+{
+  "characteristics": [
+    {
+      "atnam": "SINGLE_CHAR_NO_VHELP1",
+      "atbez": "Single Characteristic No Value Help 1",
+      "atfor": "CHAR",
+      "atein": true,
+      "anzst": 15,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": false,
+      "stackMultiValues": true,
+      "valueHelpItems": []
+    },
+    {
+      "atnam": "SINGLE_CHAR_NO_VHELP2",
+      "atbez": "Single Characteristic No Value Help 2",
+      "atfor": "CHAR",
+      "atein": true,
+      "anzst": 15,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": false,
+      "stackMultiValues": true,
+      "valueHelpItems": []
+    },
+    {
+      "atnam": "SINGLE_CHAR_VHELP1",
+      "atbez": "Single Characteristic With Value Help 1",
+      "atfor": "CHAR",
+      "atein": true,
+      "anzst": 30,
+      "anzdz": 0,
+      "atson": true,
+      "showValueHelp": true,
+      "stackMultiValues": true,
+      "valueHelpItems": [
+        {
+          "key": "",
+          "text": ""
+        },
+        {
+          "key": "TEST1",
+          "text": "Test 1"
+        },
+        {
+          "key": "TEST2",
+          "text": "Test 2"
+        },
+        {
+          "key": "TEST3",
+          "text": "Test 3"
+        },
+        {
+          "key": "TEST4",
+          "text": "Test 4"
+        },
+        {
+          "key": "TEST5",
+          "text": "Test 5"
+        },
+        {
+          "key": "TEST6",
+          "text": "Test 6"
+        },
+        {
+          "key": "TEST7",
+          "text": "Test 7"
+        }
+      ]
+    },
+    {
+      "atnam": "SINGLE_CHAR_VHELP2",
+      "atbez": "Single Characteristic With Value Help 2",
+      "atfor": "CHAR",
+      "atein": true,
+      "anzst": 7,
+      "anzdz": 0,
+      "atson": true,
+      "showValueHelp": true,
+      "stackMultiValues": true,
+      "valueHelpItems": [
+        {
+          "key": "",
+          "text": ""
+        },
+        {
+          "key": "TEST1",
+          "text": "Test 1"
+        },
+        {
+          "key": "TEST2",
+          "text": "Test 2"
+        },
+        {
+          "key": "TEST3",
+          "text": "Test 3"
+        },
+        {
+          "key": "TEST4",
+          "text": "Test 4"
+        },
+        {
+          "key": "TEST5",
+          "text": "Test 5"
+        },
+        {
+          "key": "TEST6",
+          "text": "Test 6"
+        },
+        {
+          "key": "TEST7",
+          "text": "Test 7"
+        }
+      ]
+    },
+    {
+      "atnam": "SINGLE_CHAR_VHELPONLY1",
+      "atbez": "Single Characteristic With Value Help Only 1",
+      "atfor": "CHAR",
+      "atein": true,
+      "anzst": 4,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": true,
+      "stackMultiValues": true,
+      "valueHelpItems": [
+        {
+          "key": "",
+          "text": ""
+        },
+        {
+          "key": "TEST1",
+          "text": "Test 1"
+        },
+        {
+          "key": "TEST2",
+          "text": "Test 2"
+        },
+        {
+          "key": "TEST3",
+          "text": "Test 3"
+        },
+        {
+          "key": "TEST4",
+          "text": "Test 4"
+        },
+        {
+          "key": "TEST5",
+          "text": "Test 5"
+        },
+        {
+          "key": "TEST6",
+          "text": "Test 6"
+        },
+        {
+          "key": "TEST7",
+          "text": "Test 7"
+        }
+      ]
+    },
+    {
+      "atnam": "SINGLE_CHAR_VHELPONLY2",
+      "atbez": "Single Characteristic With Value Help Only 2",
+      "atfor": "CHAR",
+      "atein": true,
+      "anzst": 4,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": true,
+      "stackMultiValues": true,
+      "valueHelpItems": [
+        {
+          "key": "",
+          "text": ""
+        },
+        {
+          "key": "TEST1",
+          "text": "Test 1"
+        },
+        {
+          "key": "TEST2",
+          "text": "Test 2"
+        },
+        {
+          "key": "TEST3",
+          "text": "Test 3"
+        },
+        {
+          "key": "TEST4",
+          "text": "Test 4"
+        },
+        {
+          "key": "TEST5",
+          "text": "Test 5"
+        },
+        {
+          "key": "TEST6",
+          "text": "Test 6"
+        },
+        {
+          "key": "TEST7",
+          "text": "Test 7"
+        }
+      ]
+    },
+    {
+      "atnam": "MULTI_CHAR_NO_VHELP1",
+      "atbez": "Multi Value Characteristic No Value Help 1",
+      "atfor": "CHAR",
+      "atein": false,
+      "anzst": 4,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": false,
+      "stackMultiValues": true,
+      "valueHelpItems": []
+    },
+    {
+      "atnam": "MULTI_CHAR_NO_VHELP2",
+      "atbez": "Multi Value Characteristic No Value Help 2",
+      "atfor": "CHAR",
+      "atein": false,
+      "anzst": 30,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": false,
+      "stackMultiValues": true,
+      "valueHelpItems": []
+    },
+    {
+      "atnam": "MULTI_CHAR_VHELP1",
+      "atbez": "Multi Value Characteristic With Value Help 1",
+      "atfor": "CHAR",
+      "atein": false,
+      "anzst": 30,
+      "anzdz": 0,
+      "atson": true,
+      "showValueHelp": true,
+      "stackMultiValues": true,
+      "valueHelpItems": [
+        {
+          "key": "",
+          "text": ""
+        },
+        {
+          "key": "TEST1",
+          "text": "Test 1"
+        },
+        {
+          "key": "TEST2",
+          "text": "Test 2"
+        },
+        {
+          "key": "TEST3",
+          "text": "Test 3"
+        },
+        {
+          "key": "TEST4",
+          "text": "Test 4"
+        },
+        {
+          "key": "TEST5",
+          "text": "Test 5"
+        },
+        {
+          "key": "TEST6",
+          "text": "Test 6"
+        },
+        {
+          "key": "TEST7",
+          "text": "Test 7"
+        }
+      ]
+    },
+    {
+      "atnam": "MULTI_CHAR_VHELP2",
+      "atbez": "Multi Value Characteristic With Value Help 2",
+      "atfor": "CHAR",
+      "atein": false,
+      "anzst": 30,
+      "anzdz": 0,
+      "atson": true,
+      "showValueHelp": true,
+      "stackMultiValues": true,
+      "valueHelpItems": [
+        {
+          "key": "",
+          "text": ""
+        },
+        {
+          "key": "TEST1",
+          "text": "Test 1"
+        },
+        {
+          "key": "TEST2",
+          "text": "Test 2"
+        },
+        {
+          "key": "TEST3",
+          "text": "Test 3"
+        },
+        {
+          "key": "TEST4",
+          "text": "Test 4"
+        },
+        {
+          "key": "TEST5",
+          "text": "Test 5"
+        },
+        {
+          "key": "TEST6",
+          "text": "Test 6"
+        },
+        {
+          "key": "TEST7",
+          "text": "Test 7"
+        }
+      ]
+    },
+    {
+      "atnam": "MULTI_CHAR_VHELPONLY1",
+      "atbez": "Multi Value Characteristic With Value Help Only1",
+      "atfor": "CHAR",
+      "atein": false,
+      "anzst": 9,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": true,
+      "stackMultiValues": true,
+      "valueHelpItems": [
+        {
+          "key": "",
+          "text": ""
+        },
+        {
+          "key": "TEST1",
+          "text": "Test 1"
+        },
+        {
+          "key": "TEST2",
+          "text": "Test 2"
+        },
+        {
+          "key": "TEST3",
+          "text": "Test 3"
+        },
+        {
+          "key": "TEST4",
+          "text": "Test 4"
+        },
+        {
+          "key": "TEST5",
+          "text": "Test 5"
+        },
+        {
+          "key": "TEST6",
+          "text": "Test 6"
+        },
+        {
+          "key": "TEST7",
+          "text": "Test 7"
+        }
+      ]
+    },
+    {
+      "atnam": "MULTI_CHAR_VHELPONLY2",
+      "atbez": "Multi Value Characteristic With Value Help Only2",
+      "atfor": "CHAR",
+      "atein": false,
+      "anzst": 30,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": true,
+      "stackMultiValues": true,
+      "valueHelpItems": [
+        {
+          "key": "",
+          "text": ""
+        },
+        {
+          "key": "TEST1",
+          "text": "Test 1"
+        },
+        {
+          "key": "TEST2",
+          "text": "Test 2"
+        },
+        {
+          "key": "TEST3",
+          "text": "Test 3"
+        },
+        {
+          "key": "TEST4",
+          "text": "Test 4"
+        },
+        {
+          "key": "TEST5",
+          "text": "Test 5"
+        },
+        {
+          "key": "TEST6",
+          "text": "Test 6"
+        },
+        {
+          "key": "TEST7",
+          "text": "Test 7"
+        }
+      ]
+    },
+    {
+      "atnam": "SINGLE_CHAR_NO_VHELP1",
+      "atbez": "Single Characteristic No Value Help 1",
+      "atfor": "NUM",
+      "atein": true,
+      "anzst": 15,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": false,
+      "stackMultiValues": true,
+      "valueHelpItems": []
+    },
+    {
+      "atnam": "SINGLE_CHAR_NO_VHELP2",
+      "atbez": "Single Characteristic No Value Help 2",
+      "atfor": "NUM",
+      "atein": true,
+      "anzst": 15,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": false,
+      "stackMultiValues": true,
+      "valueHelpItems": []
+    },
+    {
+      "atnam": "SINGLE_CHAR_VHELP1",
+      "atbez": "Single Characteristic With Value Help 1",
+      "atfor": "NUM",
+      "atein": true,
+      "anzst": 5,
+      "anzdz": 3,
+      "atson": true,
+      "showValueHelp": true,
+      "stackMultiValues": true,
+      "valueHelpItems": [
+        {
+          "key": "",
+          "text": ""
+        },
+        {
+          "key": "1",
+          "text": "1"
+        },
+        {
+          "key": "2",
+          "text": "2"
+        },
+        {
+          "key": "3",
+          "text": "3"
+        },
+        {
+          "key": "4",
+          "text": "4"
+        },
+        {
+          "key": "5",
+          "text": "5"
+        },
+        {
+          "key": "6",
+          "text": "6"
+        },
+        {
+          "key": "7",
+          "text": "7"
+        }
+      ]
+    },
+    {
+      "atnam": "SINGLE_CHAR_VHELPONLY1",
+      "atbez": "Single Characteristic With Value Help Only 1",
+      "atfor": "NUM",
+      "atein": true,
+      "anzst": 3,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": true,
+      "stackMultiValues": true,
+      "valueHelpItems": [
+        {
+          "key": "",
+          "text": ""
+        },
+        {
+          "key": "1",
+          "text": "1"
+        },
+        {
+          "key": "2",
+          "text": "2"
+        },
+        {
+          "key": "3",
+          "text": "3"
+        },
+        {
+          "key": "4",
+          "text": "4"
+        },
+        {
+          "key": "5",
+          "text": "5"
+        },
+        {
+          "key": "6",
+          "text": "6"
+        },
+        {
+          "key": "7",
+          "text": "7"
+        }
+      ]
+    },
+    {
+      "atnam": "SINGLE_CHAR_VHELPONLY2",
+      "atbez": "Single Characteristic With Value Help Only 2",
+      "atfor": "NUM",
+      "atein": true,
+      "anzst": 7,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": true,
+      "stackMultiValues": true,
+      "valueHelpItems": [
+        {
+          "key": "",
+          "text": ""
+        },
+        {
+          "key": "1",
+          "text": "1"
+        },
+        {
+          "key": "2",
+          "text": "2"
+        },
+        {
+          "key": "3",
+          "text": "3"
+        },
+        {
+          "key": "4",
+          "text": "4"
+        },
+        {
+          "key": "5",
+          "text": "5"
+        },
+        {
+          "key": "6",
+          "text": "6"
+        },
+        {
+          "key": "7",
+          "text": "7"
+        }
+      ]
+    },
+    {
+      "atnam": "MULTI_CHAR_NO_VHELP1",
+      "atbez": "Multi Value Characteristic No Value Help 1",
+      "atfor": "NUM",
+      "atein": false,
+      "anzst": 10,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": false,
+      "stackMultiValues": true,
+      "valueHelpItems": []
+    },
+    {
+      "atnam": "MULTI_CHAR_NO_VHELP2",
+      "atbez": "Multi Value Characteristic No Value Help 2",
+      "atfor": "NUM",
+      "atein": false,
+      "anzst": 9,
+      "anzdz": 3,
+      "atson": false,
+      "showValueHelp": false,
+      "stackMultiValues": true,
+      "valueHelpItems": []
+    },
+    {
+      "atnam": "MULTI_CHAR_VHELPONLY1",
+      "atbez": "Multi Value Characteristic With Value Help Only1",
+      "atfor": "NUM",
+      "atein": false,
+      "anzst": 6,
+      "anzdz": 3,
+      "atson": false,
+      "showValueHelp": true,
+      "stackMultiValues": true,
+      "valueHelpItems": [
+        {
+          "key": "",
+          "text": ""
+        },
+        {
+          "key": "1",
+          "text": "1"
+        },
+        {
+          "key": "2",
+          "text": "2"
+        },
+        {
+          "key": "3",
+          "text": "3"
+        },
+        {
+          "key": "4",
+          "text": "4"
+        },
+        {
+          "key": "5",
+          "text": "5"
+        },
+        {
+          "key": "6",
+          "text": "6"
+        },
+        {
+          "key": "7",
+          "text": "7"
+        }
+      ]
+    },
+    {
+      "atnam": "MULTI_CHAR_VHELPONLY2",
+      "atbez": "Multi Value Characteristic With Value Help Only2",
+      "atfor": "NUM",
+      "atein": false,
+      "anzst": 9,
+      "anzdz": 3,
+      "atson": false,
+      "showValueHelp": true,
+      "stackMultiValues": true,
+      "valueHelpItems": [
+        {
+          "key": "",
+          "text": ""
+        },
+        {
+          "key": "1",
+          "text": "1"
+        },
+        {
+          "key": "2",
+          "text": "2"
+        },
+        {
+          "key": "3",
+          "text": "3"
+        },
+        {
+          "key": "4",
+          "text": "4"
+        },
+        {
+          "key": "5",
+          "text": "5"
+        },
+        {
+          "key": "6",
+          "text": "6"
+        },
+        {
+          "key": "7",
+          "text": "7"
+        }
+      ]
+    },
+    {
+      "atnam": "SINGLE_CHAR_NO_VHELP1",
+      "atbez": "Single Characteristic No Value Help 1",
+      "atfor": "DATE",
+      "atein": true,
+      "anzst": 10,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": false,
+      "stackMultiValues": true,
+      "valueHelpItems": []
+    },
+    {
+      "atnam": "SINGLE_CHAR_NO_VHELP2",
+      "atbez": "Single Characteristic No Value Help 2",
+      "atfor": "DATE",
+      "atein": true,
+      "anzst": 10,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": false,
+      "stackMultiValues": true,
+      "valueHelpItems": []
+    },
+    {
+      "atnam": "SINGLE_CHAR_VHELPONLY1",
+      "atbez": "Single Characteristic With Value Help Only 1",
+      "atfor": "DATE",
+      "atein": true,
+      "anzst": 10,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": true,
+      "stackMultiValues": true
+    },
+    {
+      "atnam": "MULTI_CHAR_NO_VHELP1",
+      "atbez": "Multi Value Characteristic No Value Help 1",
+      "atfor": "DATE",
+      "atein": false,
+      "anzst": 10,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": false,
+      "stackMultiValues": true,
+      "valueHelpItems": []
+    },
+    {
+      "atnam": "MULTI_CHAR_VHELPONLY1",
+      "atbez": "Multi Value Characteristic With Value Help Only1",
+      "atfor": "DATE",
+      "atein": false,
+      "anzst": 10,
+      "anzdz": 0,
+      "atson": false,
+      "showValueHelp": true,
+      "stackMultiValues": true
+    }
+  ]
+}

@@ -10,11 +10,14 @@ sap.ui.define([
 			var viewModel = new JSONModel();
 			viewModel.setData({
 				showDecimals: false,
-				showStackMultiValues: false
+				showStackMultiValues: false,
+				characteristics: []
 			});
 			
 			// Set the model the view
 			this.getView().setModel(viewModel, "viewModel");
+			
+			this.setCharacteristicsToModel();
 		},
 		updateUI: function() {
 			this.charName = this.byId("charName").getValue();
@@ -58,6 +61,41 @@ sap.ui.define([
 			if(this.charType === "NUM") {
 				this.getView().getModel("viewModel").setProperty("/showDecimals", true);
 			}
+			
+		},
+		setCharacteristicsToModel: function() {
+			var path = jQuery.sap.getModulePath("CharacteristicCustomControl", "/model/Characteristics.json"); 
+			// initialize the model with the JSON file
+			var characteristicsModel = new JSONModel(path);
+			      
+			// set the model to the view
+			this.getView().setModel(characteristicsModel, "characteristicsModel");
+		},
+		onSelectionChange: function(evt) {
+			// Get the selected item
+			var selectedItem = evt.getParameter("item");
+			var key = selectedItem.getKey();
+			
+			if(key === "opts") {
+				this.byId("characteristicsOptions").setVisible(true);
+				this.byId("characteristicsTable").setVisible(false);
+			} else if(key === "table") {
+				this.byId("characteristicsOptions").setVisible(false);
+				this.byId("characteristicsTable").setVisible(true);
+			}
+			
+		},
+		stackValuesChanged: function(evt) {
+			var state = evt.getSource().getState();
+			
+			// Get the characteristics data 
+			var characteristics = this.getView().getModel("characteristicsModel").getProperty("/characteristics");
+			
+			characteristics.forEach(function(characteristic) {
+				characteristic.stackMultiValues = state;
+			});
+			
+			this.getView().getModel("characteristicsModel").setProperty("/characteristics", characteristics);
 			
 		}
 		

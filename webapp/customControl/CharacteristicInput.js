@@ -172,6 +172,7 @@ sap.ui.define([
 				this._outputControl = new MultiInput({
 					valueHelpOnly: true, // Multi Values for Characteristics to be entered through value help only
 					width: "100%",
+					placeholder: "Add multiple values for " + this.getDescription() + " using value help",
 					valueHelpRequest: function() {
 						this._createMultiInputValueHelp();
 					}.bind(this)

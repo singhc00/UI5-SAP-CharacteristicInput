@@ -1,0 +1,168 @@
+<mvc:View controllerName="CharacteristicCustomControl.controller.Characteristics" xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:cc="CharacteristicCustomControl.customControl"
+	xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:fb="sap.ui.comp.filterbar">
+	<App id="idAppControl">
+		<pages>
+			<Page title="Characteristics Input Control">
+				<content>
+					<VBox alignItems="Center" justifyContent="Center">
+						<SegmentedButton selectionChange="onSelectionChange">
+							<items>
+								<SegmentedButtonItem text="Show Characteristic Options" key="opts"/>
+								<SegmentedButtonItem text="Show Characteristics - Table" key="table"/>	
+							</items>
+							
+						</SegmentedButton>	
+					</VBox>
+					
+					<VBox id="characteristicsOptions">
+							<fb:FilterBar useToolbar="false" showGoOnFB="false" showFilterConfiguration="false" id="characteristicOptionsFilterBar">
+							<fb:filterGroupItems>
+								<fb:FilterGroupItem groupName="1" name="Name" label="Characteristic Name(cabn-atnam)" visibleInFilterBar="true">
+									<fb:control>
+										<Input id="charName" placeholder="Characteristic Name" change="updateUI"/>		
+									</fb:control>
+									
+								</fb:FilterGroupItem>
+								
+								<fb:FilterGroupItem groupName="1" name="Description" label="Characteristic Description(cabnt-atbez)" visibleInFilterBar="true">
+									<fb:control>
+										<Input id="charDescription" placeholder="Characteristic Description" change="updateUI"/>		
+									</fb:control>
+									
+								</fb:FilterGroupItem>
+								
+								<fb:FilterGroupItem groupName="1" name="Type" label="Characteristic Type(cabn-atfor)" visibleInFilterBar="true">
+									<fb:control>
+										<Select id="charType" selectedKey="CHAR" change="updateUI">
+									<items>
+										<core:Item key="CHAR" text="CHAR" />
+										<core:Item key="NUM" text="NUM" />
+										<core:Item key="DATE" text="DATE" />
+									</items>
+								</Select>		
+									</fb:control>
+									
+								</fb:FilterGroupItem>
+								
+								<fb:FilterGroupItem groupName="1" name="MultiValue" label="Multi Value(cabn-atein)" visibleInFilterBar="true">
+									<fb:control>
+										<Switch id="charMultiValue" change="updateUI" />		
+									</fb:control>
+									
+								</fb:FilterGroupItem>
+								
+								<fb:FilterGroupItem groupName="1" name="StackMultiValues" label="Stack Multi Values" visibleInFilterBar="true" visible="{viewModel>/showStackMultiValues}">
+									<fb:control>
+										<Switch id="charStackMultiValues" change="updateUI" state="true"/>		
+									</fb:control>
+									
+								</fb:FilterGroupItem>
+								
+								<fb:FilterGroupItem groupName="2" name="Length" label="Characteristic Length(cabn-anzst)" visibleInFilterBar="true">
+									<fb:control>
+										<Input id="charLength" placeholder="Characteristic Length" value="30" change="updateUI"/>	
+									</fb:control>
+									
+								</fb:FilterGroupItem>
+								
+								<fb:FilterGroupItem groupName="2" name="Decimals" label="Characteristic Decimals(cabn-anzdz)" visibleInFilterBar="true" visible="{viewModel>/showDecimals}">
+									<fb:control>
+										<Input id="charDecimals" value="0" placeholder="Characteristic Decimals" change="updateUI"/>	
+									</fb:control>
+									
+								</fb:FilterGroupItem>
+								
+								<fb:FilterGroupItem groupName="2" name="ShowValueHelp" label="Show Value Help(cawnt values)" visibleInFilterBar="true">
+									<fb:control>
+										<Switch id="charShowValueHelp" change="updateUI"/>
+									</fb:control>
+									
+								</fb:FilterGroupItem>
+								
+								<fb:FilterGroupItem groupName="2" name="ValueHelpOnly" label="Value Help Only(cabn-atson)" visibleInFilterBar="true">
+									<fb:control>
+										<Switch id="charValueHelpOnly" change="updateUI"/>
+									</fb:control>
+									
+								</fb:FilterGroupItem>
+							</fb:filterGroupItems>
+						</fb:FilterBar>
+						
+						
+						<VBox>
+							<cc:CharacteristicInput id="characteristicInput" class="sapUiSmallMarginBegin sapUiSmallMarginEnd">
+								<cc:valueHelpItems>
+									<core:Item key="TEST1" text="Test 1"/>
+									<core:Item key="TEST2" text="Test 2"/>
+									<core:Item key="TEST3" text="Test 3"/>
+									<core:Item key="TEST4" text="Test 4"/>
+									<core:Item key="TEST5" text="Test 5"/>
+									<core:Item key="TEST6" text="Test 6"/>
+									<core:Item key="TEST7" text="Test 7"/>
+								</cc:valueHelpItems>
+							</cc:CharacteristicInput>
+						</VBox>
+				
+					</VBox>
+					
+					<VBox id="characteristicsTable" visible="false">
+						<Table items="{characteristicsModel>/characteristics}" headerText="Characteristics">
+							<headerToolbar>
+								<Toolbar>
+									<Title text="Characteristics" />
+									<ToolbarSpacer/>
+									<FlexBox alignItems="Center" justifyContent="Start">
+									   <items>
+									     <Switch change="stackValuesChanged" state="true" class="sapUiSmallMarginEnd"></Switch>          
+									     <Text text="Stack Multiple Values"/>
+									   </items>
+									</FlexBox>
+									
+								</Toolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="20rem">
+									<Label text="Characteristic Name" />
+								</Column>
+								
+								
+								<Column width="20rem">
+									<Label text="Characteristic" />
+								</Column>
+							</columns>
+							
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{characteristicsModel>atbez}" />
+										<cc:CharacteristicInput
+											name="{characteristicsModel>atnam}"
+											description="{characteristicsModel>atbez}"
+											type="{characteristicsModel>atfor}"
+											multiValue="{= ${characteristicsModel>atein} ? false : true}"
+											length="{characteristicsModel>anzst}"
+											decimals="{characteristicsModel>anzdz}"
+											valueHelpOnly="{= !${characteristicsModel>atson} &amp;&amp; ${characteristicsModel>showValueHelp} ? true : false }"
+											showValueHelp="{characteristicsModel>showValueHelp}"
+											stackMultiValues="{characteristicsModel>stackMultiValues}"
+											valueHelpItems="{characteristicsModel>valueHelpItems}"
+											>
+											
+											
+											<cc:valueHelpItems>
+												<core:Item key="{characteristicsModel>key}" text="{characteristicsModel>text}"/>
+											</cc:valueHelpItems>
+										</cc:CharacteristicInput>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</VBox>
+				
+					
+				</content>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>
