@@ -69,7 +69,8 @@ sap.ui.define([
 					defaultValue: "CHAR"
 				},
 				multiValue: {
-					type: "boolean"
+					type: "boolean",
+					default: false
 				},
 				length: {
 					type: "int",
@@ -80,17 +81,19 @@ sap.ui.define([
 					defaultValue: 0
 				},
 				valueHelpOnly: {
-					type: "boolean"
+					type: "boolean",
+					defaultValue: false
 				},
 				showValueHelp: {
-					type: "boolean"
-				},
-				value: {
-					type: "string"
+					type: "boolean",
+					defaultValue: false
 				},
 				stackMultiValues: {
 					type: "boolean",
 					defaultValue: true
+				},
+				value: {
+					type: "string"
 				},
 				hasErrors: {
 					type: "boolean",
@@ -101,14 +104,15 @@ sap.ui.define([
 			},
 			aggregations : {
 				_outputControl: {type: "sap.ui.core.Control", multiple: false, visibility: "hidden"},
-				valueHelpItems: {
-					type: "sap.ui.core.Item",
-					multiple: true
-				},
 				values: {
 					type: "sap.ui.core.Item",
 					multiple: true
+				},
+				valueHelpItems: {
+					type: "sap.ui.core.Item",
+					multiple: true
 				}
+				
 			}
 		},
 		init : function () {
