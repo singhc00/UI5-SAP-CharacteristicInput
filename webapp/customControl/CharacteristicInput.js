@@ -19,7 +19,13 @@ sap.ui.define([
 	"sap/m/Link",
 	"sap/m/List",
 	"sap/m/ListMode",
-	"sap/m/Token"
+	"sap/m/Token",
+	"sap/ui/core/CustomData",
+	"sap/ui/core/ValueState",
+	"sap/m/MessageBox",
+	"sap/m/DatePicker",
+	"sap/m/ResponsivePopover",
+	"sap/ui/unified/Calendar"
 ], function (Control, 
 			 Input, 
 			 MultiInput, 
@@ -40,20 +46,27 @@ sap.ui.define([
 			 Link,
 			 List,
 			 ListMode, 
-			 Token) {
+			 Token, 
+			 CustomData,
+			 ValueState, 
+			 MessageBox,
+			 DatePicker,
+			 ResponsivePopover,
+			 Calendar) {
 	"use strict";
 	return Control.extend("CharacteristicCustomControl.customControl.CharacteristicInput", {
 		metadata : {
 			properties: {
 				name: {
-					type: "string",
-					defaultValue: "Characteristic"
+					type: "string"
 				},
 				description: {
-					type: "description"	
+					type: "description",
+					defaultValue: "Characteristic"
 				},
 				type: {
-					type: "string"
+					type: "string",
+					defaultValue: "CHAR"
 				},
 				multiValue: {
 					type: "boolean"
@@ -78,7 +91,13 @@ sap.ui.define([
 				stackMultiValues: {
 					type: "boolean",
 					defaultValue: true
-				}
+				},
+				hasErrors: {
+					type: "boolean",
+					defaultValue: false
+				},
+				width: { type: "sap.ui.core.CSSSize" }
+
 			},
 			aggregations : {
 				_outputControl: {type: "sap.ui.core.Control", multiple: false, visibility: "hidden"},
@@ -102,10 +121,18 @@ sap.ui.define([
 			oRM.writeControlData(oControl);
 			oRM.addClass("sapUI5Charactersistic");
 			oRM.writeClasses();
+			oControl._setInlineCSS(oRM);
 			oRM.write(">");
 			oRM.renderControl(oControl._outputControl);
 			oRM.write("</div>");
 			
+		},
+		/**
+		 * Sets the width to the control
+		 * */
+		_setInlineCSS: function(oRM) {
+			var width = this.getWidth();
+			oRM.write('style="width: ' + width + '"');
 		},
 		/**
 		 * Method determines which type of control is required based on the different properties
@@ -114,11 +141,17 @@ sap.ui.define([
 			var type = this.getType();
 			var multiValue = this.getMultiValue();
 			
-			if(type === "CHAR" || type === "NUMBER") {
+			if(type === "CHAR" || type === "NUM") {
 				if(multiValue) {
 					this._createMultiValueInputControl();	
 				} else {
 					this._createSingleValueInputControl();
+				}
+			} else if(type === "DATE") {
+				if(multiValue) {
+					this._createMultiValueDateControl();
+				} else {
+					this._createSingleDateControl();	
 				}
 				
 			}
@@ -138,13 +171,13 @@ sap.ui.define([
 			} else {
 				this._outputControl = new MultiInput({
 					valueHelpOnly: true, // Multi Values for Characteristics to be entered through value help only
+					width: "100%",
 					valueHelpRequest: function() {
 						this._createMultiInputValueHelp();
 					}.bind(this)
 				});	
 			}
 			this._addMutliValuesToControl();
-			this.setAggregation(this._outputControl);
 		},
 		/**
 		 * Function creates a single Value Input control and adds validations based on the type 
@@ -152,17 +185,205 @@ sap.ui.define([
 		_createSingleValueInputControl: function() {
 			var showValueHelp = this.getShowValueHelp();
 			var valueHelpOnly = this.getValueHelpOnly();
+			var placeholder = "Enter Value for " + this.getDescription();
+			
+			if(this.getType() === "NUM") {
+				var maxValue = this._calculateNumberMaxValue();
+				placeholder += ". Max Value " + maxValue;
+			}
+			
 			this._outputControl = new Input({
 				showValueHelp: showValueHelp,
 				valueHelpOnly: valueHelpOnly,
 				maxLength: this.getLength(),
+				placeholder: placeholder,
+				valueLiveUpdate: true,
+				showValueStateMessage: true,
+				value: this.getValue(),
 				valueHelpRequest: function() {
 					// Set the value help control 
 					this._valueHelpControl = this._outputControl;
 					this._openCharacteristicValueHelp();
+				}.bind(this),
+				liveChange: function() {
+					this.setValue(this._outputControl.getValue());
+					if(this.getType() === "NUM") {
+						this._validateNumberInputControl(this._outputControl);	
+					}
+					
+					this._singleInputSelectionStart = this._outputControl.getFocusDomRef().selectionStart;
 				}.bind(this)
 			});
+			
+			this._outputControl.onAfterRendering = function() {
+				var domRef = this._outputControl.getFocusDomRef();
+				domRef.focus();
+				domRef.selectionStart = this._singleInputSelectionStart;
+			}.bind(this);
+			
+			if(this.getType() === "NUM") {
+				this._validateNumberInputControl(this._outputControl);	
+			}
 			this.setAggregation(this._outputControl);
+		},
+		/**
+		 * Function creates single date input control
+		 * */
+		_createSingleDateControl: function() {
+			this._outputControl = new DatePicker({
+				change: function(evt) {
+					// Get the date value
+					var dateValue = evt.getSource().getDateValue();
+					
+					// Convert the date to SAP date
+					var sapDateStr = this._convertDateObjectToSAPDate(dateValue);
+					
+					this.setValue(sapDateStr);
+					
+				}.bind(this)
+			});
+		},
+		/**
+		 * Function creates Multi Value Date Control
+		 * */
+		_createMultiValueDateControl: function() {
+			if(this.getStackMultiValues()) {
+				this._createStackedMutliDateControl();
+			} else {
+				this._createMultiInputDateControl(); 
+			}
+		},
+		/**
+		 * Function creates Multi Input Date control when the stack values is false
+		 * */
+		_createMultiInputDateControl: function() {
+			var hBox = new HBox();
+			
+			var datePickerPopover = new ResponsivePopover({
+				placement: "Auto"
+			});
+			
+			
+			var calendar = new Calendar({
+				select: function(evt) {
+					var selectedDates = evt.getSource().getSelectedDates();
+					if(!selectedDates || selectedDates.length === 0) {
+						return;
+					}
+					datePickerPopover.close();
+					// convert the value to sap date
+					
+					var sapDateStr = this._convertDateObjectToSAPDate(selectedDates[0].getStartDate());
+					var value = new Item({
+						key: sapDateStr
+					});
+					this.addValue(value);
+					
+				}.bind(this)
+			});
+			
+			datePickerPopover.addContent(calendar);
+			var calendarButton = new Button({
+				icon: "sap-icon://appointment-2",
+				type: "Transparent",
+				press: function() {
+					datePickerPopover.openBy(calendarButton);
+				}
+			});
+			var multiInput = new MultiInput({
+				showValueHelp: false
+			});
+			// Multi Input control needs to cover the most of the space
+			multiInput.setLayoutData(new FlexItemData({
+				growFactor: 1
+			}));
+			
+			// Get all the values and set that to multi input
+			var values = this.getValues();
+			
+			values.forEach(function(value) {
+				var dateText = this._convertSapDateToOutput(value.getKey());
+				multiInput.addToken(new Token({
+					key: value.getKey(),
+					text: dateText,
+					delete: function(evt) {
+						var selectedToken = evt.getSource();
+						// Delete the token from multi input
+						this._deleteFromMultiInput(selectedToken);
+						
+					}.bind(this)
+				}));
+			}.bind(this));
+			
+			
+			hBox.addItem(multiInput);
+			hBox.addItem(calendarButton);
+			
+			// Set the Hbox as the out control
+			this._outputControl = hBox;
+		},
+		/**
+		 * Function creates the date values in a stack/VBox
+		 * */
+		_createStackedMutliDateControl: function() {
+			this._outputControl = new VBox();
+			
+			// Get all the values for the control
+			var values = this.getValues();
+			
+			// Loop at all the values and add that to the date the control
+			values.forEach(function(value) {
+				
+				var hBox = new HBox();
+				// Create the date picker
+				var datePicker = new DatePicker({
+					value: value.getKey(),
+					change: function(evt) {
+						// Get the date value
+						var dateValue = evt.getSource().getDateValue();
+						var sapDateStr = this._convertDateObjectToSAPDate(dateValue);
+						value.setKey(sapDateStr);
+					}.bind(this)
+				});
+				
+				// Date Picker needs to cover most of the space in the HBox
+				datePicker.setLayoutData(new FlexItemData({
+					growFactor: 1
+				}));
+				hBox.addItem(datePicker);
+				
+				// Create the button to remove the item
+				var removeButton = new Button({
+					icon: "sap-icon://less"	,
+					tooltip: "Remove",
+					press: function() {
+						// Remove the value from the control which leads to rerendering
+						this.removeValue(value);
+					}.bind(this)
+				});
+				
+				hBox.addItem(removeButton);
+				
+				// Add the HBox to the VBox
+				this._outputControl.addItem(hBox);
+				
+			}.bind(this));
+			
+			
+			// Button to add new value
+			var newValueButton = new Button({
+				text: "Add New Date",
+				icon: "sap-icon://add",
+				press: function() {
+					this.addValue(new Item({
+						key: "",
+						text: ""
+					}));
+				}.bind(this)
+			});
+			
+			this._outputControl.addItem(newValueButton);
+			
 		},
 		/**
 		 * Function opens a sap.m.SelectDialog for selection of value help 
@@ -281,14 +502,16 @@ sap.ui.define([
 			if(text) {
 				controlValue += " - " + text;
 			}
-			this._valueHelpControl.setValue(controlValue);
+			if(this._valueHelpControl) {
+				this._valueHelpControl.setValue(controlValue);
 			
-			
-			// Check if this has a current Value item which is for multipleinput
-			if(this._valueHelpControl._currentValueItem) {
-				this._valueHelpControl._currentValueItem.setKey(value);
-				this._valueHelpControl._currentValueItem.setText(text);
+				// Check if this has a current Value item which is for multipleinput
+				if(this._valueHelpControl._currentValueItem) {
+					this._valueHelpControl._currentValueItem.setKey(value);
+					this._valueHelpControl._currentValueItem.setText(text);
+				}
 			}
+			
 		},
 		/**
 		 * Function adds Multiple Values to control
@@ -309,7 +532,7 @@ sap.ui.define([
 				}
 				
 				// Loop at all the values and add input fields
-				values.forEach(function(value) {
+				values.forEach(function(value, index) {
 					var controlValue = value.getKey();
 					
 					// Get the text value
@@ -317,15 +540,55 @@ sap.ui.define([
 						controlValue += " - " + value.getText();
 					}
 					
+					var placeholder = "Enter value for " + this.getDescription();
+					
+					if(this.getType() === "NUM") {
+						var maxValue = this._calculateNumberMaxValue();
+						placeholder += ". Max value " + maxValue;
+					}
+					
 					var inputControl = new Input({
 						value: controlValue,
 						showValueHelp: this.getShowValueHelp(),
 						valueHelpOnly: this.getValueHelpOnly(),
+						valueLiveUpdate: true,
+						placeholder: placeholder,
+						maxLength: this.getLength(),
 						valueHelpRequest: function() {
 							this._valueHelpControl = inputControl;
 							this._openCharacteristicValueHelp();
+						}.bind(this),
+						liveChange: function(evt) {
+							var inputValue = evt.getParameter("value");
+							inputControl._currentValueItem.setKey(inputValue);
+							
+							// Get the focus info - because the focus would go away when we set the property
+							this._multiInputSelectionStart = inputControl.getFocusDomRef().selectionStart;
+							this._multiInputStackFocusIndex = index;
+							
+							// Validate the value if this is a number
+							if(this.getType() === "NUM") {
+								this._validateNumberInputControl(inputControl);
+							}
 						}.bind(this)
 					});
+					
+					inputControl.onAfterRendering = function() {
+						if(this._multiInputStackFocusIndex === index) {
+							var oDomRef = inputControl.getFocusDomRef();
+							if (oDomRef) {
+								// Focus back on the field that the user was typing in
+								oDomRef.focus();
+								oDomRef.selectionStart = this._multiInputSelectionStart;
+							}
+						}
+						
+					}.bind(this);
+					
+					// Validate the maximum value for the control
+					if(this.getType() === "NUM") {
+						this._validateNumberInputControl(inputControl);
+					}
 					
 					inputControl._currentValueItem = value;
 					
@@ -357,6 +620,12 @@ sap.ui.define([
 							key: "",
 							text: ""
 						}));
+						
+						// Update the focus information
+						if(this._multiInputStackFocusIndex !== null) {
+							this._multiInputStackFocusIndex += 1;
+							this._multiInputSelectionStart = 1;
+						}
 					}.bind(this),
 					text: "Add New Value",
 					icon: "sap-icon://add"
@@ -379,7 +648,7 @@ sap.ui.define([
 			
 			// Create a new dialog for the value help
 			var valueHelpDialog = new Dialog({
-				title: "Value Help for " + this.getName(),
+				title: "Value Help for " + this.getDescription(),
 				contentHeight: "600px",
 				afterClose: function() {
 					this._destroyMultiHelpDialogContent();
@@ -487,7 +756,6 @@ sap.ui.define([
 			multiValueHelpModel.setData({
 				valueHelp: valueHelp	
 			});
-			
 			return multiValueHelpModel;
 			
 		},
@@ -510,8 +778,10 @@ sap.ui.define([
 				placeholder = "Create/Search values...";
 			}
 			
-			this._searchFieldMultInputValueHelp = new SearchField({
+			this._searchFieldMultInputValueHelp = new Input({
 				placeholder: placeholder,
+				maxLength: this.getLength(),
+				valueHelpIconSrc: "sap-icon://search",
 				liveChange: function(evt) {
 					// Get the value
 					var value = evt.getParameter("newValue");
@@ -524,11 +794,14 @@ sap.ui.define([
 						this._setNewValueMessageStripVisibility(false);
 					}
 					
-					
-					
 					// Add strip for the user to add new value
 					if(!this.getValueHelpOnly()) {
 						this._addNewValueAddMessageStrip(value, valueHelpDialog);	
+					}
+					
+					// Validate the value for the search field if a number
+					if(this.getType() === "NUM") {
+						this._validateNumberInputControl(this._searchFieldMultInputValueHelp);
 					}
 					
 				}.bind(this)
@@ -563,6 +836,12 @@ sap.ui.define([
 				text: "Add " + newValue + " to Characteristic values",
 				href: null,
 				press: function() {
+					// Check if there are errors
+					if(this.getHasErrors()) {
+						MessageToast.show("Please fix the error for the Characteristic value");
+						return;
+					}
+					
 					// Get the value help model
 					var valueHelpModel = valueHelpDialog.getModel("multiValueHelpModel");
 					
@@ -664,6 +943,9 @@ sap.ui.define([
 			this._searchFieldMultInputValueHelp = null;
 			this._addNewValueMessageStrip = null;
 			this._multiInputValueHelpList = null;
+			
+			// Set the hasErrors as false for the control
+			this.setHasErrors(false);
 		},
 		/**
 		 * Add tokens to multi input
@@ -682,10 +964,17 @@ sap.ui.define([
 				
 				this._outputControl.addToken(new Token({
 					key: value.getKey(),
-					text: text
+					text: text,
+					delete: function(evt) {
+						var selectedToken = evt.getSource();
+						
+						this._deleteFromMultiInput(selectedToken);
+						
+					}.bind(this)
 				}));	
 			}.bind(this));
 			
+			this._outputControl.rerender();
 		},
 		/**
 		 * Add new selected value in the value help
@@ -711,12 +1000,160 @@ sap.ui.define([
 			multiValueHelpModel.setProperty("/valueHelp", valueHelp);
 			
 		},
+		/**
+		 * This function calculates the maximum values for the Numeric Characteristic
+		 * @returns {float} Maximum value for the characteristic
+		 * */
+		_calculateNumberMaxValue: function() {
+			// Get the length of the characteristic
+			var length = this.getLength();
+			
+			// Get decimals for the characteristic
+			var decimals = this.getDecimals();
+			decimals = parseInt(decimals) + 1;
+			
+			var maxValueChars = [];
+			
+			// Loop at length and add letter 9 to the max value chars because 9 can be the maximum value for a single digit number
+			for(var i = 1; i <= length; i++) {
+				if(decimals === i && decimals !== 1) {
+					// Add a dot at the decimal value length
+					maxValueChars.push(".");
+				} else {
+					maxValueChars.push("9");	
+				}
+				
+			}
+			
+			// Reverse the string to get the correct value as the decimal point is at the begining
+			maxValueChars = maxValueChars.reverse();
+			
+			var maxValue = maxValueChars.join("");
+		
+			return maxValue;
+			
+		},
+		/**
+		 * This function validates input control for Numeric Characteristics
+		 * @param {sap.m.Input} inputControl [Instance of the input control]
+		 * */
+		_validateNumberInputControl: function(inputControl) {
+			// Check if the value is numeric
+			this._validateNumericOnly(inputControl);
+			
+			// Check if already errors found, then return
+			if(this.getHasErrors()) {
+				return;
+			}
+			
+			// Validate the maximum value of the input control
+			this._validateMaxValueForInputControl(inputControl);
+			
+			
+		},
+		/**
+		 * Function validates the maximum value for the input control and changes the value state accordingly
+		 * @param {sap.m.Input} inputControl [Instance of the input control]
+		 * */
+		_validateMaxValueForInputControl: function(inputControl) {
+			// Set the property hasErrors to false by default
+			this.setHasErrors(false);
+			
+			// Get the input control value
+			var value = inputControl.getValue();
+			
+			// Get the maximum value
+			var maxValue = this._calculateNumberMaxValue();
+			
+			// Set the value state to none by default
+			inputControl.setValueState("None");
+			inputControl.setValueStateText("");
+			
+			if(parseFloat(value) > parseFloat(maxValue)) {
+				inputControl.setValueState(ValueState.Error);
+				inputControl.setValueStateText("Value cannot be greater than " + maxValue);
+				this.setHasErrors(true);
+			}
+			// Rerender the control to show the changes
+			inputControl.rerender();
+		},
+		/**
+		 * Validate if the value in the input control is numeric only
+		 * @param {sap.m.Input} inputControl [Instance of the input control]
+		 * */
+		_validateNumericOnly: function(inputControl) {
+			// Set the property hasErrors to false by default
+			this.setHasErrors(false);
+			
+			// Get the value
+			var value = inputControl.getValue();
+			
+			if(isNaN(value)) {
+				inputControl.setValueState(ValueState.Error);
+				inputControl.setValueStateText("Numeric values only");
+				
+				// Set hasErrors as true
+				this.setHasErrors(true);	
+			}
+			
+		},
+		/**
+		 * Convert Date Object to SAP Date
+		 * */
+		_convertDateObjectToSAPDate: function(date) {
+			var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate().toString();
+			var month = date.getMonth() < 10 ? "0" + date.getMonth() : date.getMonth().toString();
+			var year = date.getFullYear();
+			
+			return year + month + day;
+		},
+		/**
+		 * Converts SAP Date string to output
+		 * */
+		_convertSapDateToOutput: function(sapDateStr) {
+			var jsDate = sapDateStr.substr(0,4) + "-" + sapDateStr.substr(4,2) + "-" + sapDateStr.substr(6,2);
+			
+			var oFormat = sap.ui.core.format.DateFormat.getInstance();
+			
+			return oFormat.format(new Date(jsDate));
+		},
+		/**
+		 * Function deletes the value from a MultiInput control
+		 * @param {sap.m.Token} token [Token which needs to be deleted]
+		 * */
+		_deleteFromMultiInput: function(token) {
+			var tokenText = token.getKey();
+			// If text for the token found, then show that instead of the key value
+			if(token.getText()) {
+				tokenText = token.getText();
+			}
+			MessageBox.confirm("Are you sure you want to delete '" + tokenText + "' from values?", {
+				onClose: function(action) {
+					if(action === MessageBox.Action.OK) {
+						var controlValues = this.getValues();
+						
+						// Get the value with the the selected key
+						var selectedValue = controlValues.filter(function(controlValue) {
+							return controlValue.getKey() === token.getKey();
+						});
+						
+						if(selectedValue && selectedValue.length > 0) {
+							this.removeValue(selectedValue[0]);
+						}
+						
+					}
+				}.bind(this)
+			});
+		},
 		_outputControl: null,
 		_valueHelpControl: null,
 		_currentItem: null,
 		_newValueMessageStrip: null,
 		_searchFieldMultInputValueHelp: null,
 		_addNewValueMessageStrip: null,
-		_multiInputValueHelpList: null
+		_multiInputValueHelpList: null,
+		_multiInputSelectionStart: null,
+		_multiInputStackFocusIndex: null,
+		_singleInputSelectionStart: null
 	});
 });
